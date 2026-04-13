@@ -194,11 +194,11 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    function AccountCard({ name, balance, currency, icon, accountNumber }) {
+    function AccountCard({ type, name, balance, currency, icon, accountNumber }) {
       return (
         <div className="account-card">
           <div className="card-header">
-            <span className="card-type">Savings Account</span>
+            <span className="card-type">{type}</span>
             <div className="card-icon">{icon}</div>
           </div>
 
@@ -213,7 +213,7 @@
             <span className="card-number">{accountNumber}</span>
             <span className="card-status">
               <span className="status-dot"></span>
-              Active
+              Активен
             </span>
           </div>
         </div>
@@ -223,14 +223,16 @@
     function App() {
       const accounts = [
         {
-          name: 'Main Account',
+          type: 'Сберегательный счёт',
+          name: 'Основной счёт',
           balance: 24830.50,
           currency: 'USD',
           icon: '\u{1F48E}',
           accountNumber: '\u2022\u2022\u2022\u2022 4521',
         },
         {
-          name: 'Savings Goal',
+          type: 'Сберегательный счёт',
+          name: 'Накопительный',
           balance: 12460.00,
           currency: 'USD',
           icon: '\u2728',
