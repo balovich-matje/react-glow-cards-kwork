@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Счета — Glassmorphism Demo</title>
+
+  <!-- React via CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    /* ── Reset & Base ─────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: #1e1e1e;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* ── Page layout ─────────────────────────────── */
+    .page {
+      padding: 12px 20px 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-title {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, .7);
+      margin-bottom: 8px;
+    }
+
+    /* ── Scene container with rotated space background ── */
+    .scene {
+      position: relative;
+      flex: 1;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #000 url('space-bg-rotated.jpg') 50% 25% / 90% no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 40px 5%;
+    }
+
+    .cards-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      z-index: 1;
+    }
+
+    /* ── Account Card — pure glass ───────────────── */
+    .account-card {
+      position: relative;
+      width: 520px;
+      padding: 26px 30px 22px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .04);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, .10);
+      cursor: default;
+      transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease, background .35s ease;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, .2);
+    }
+
+    .account-card:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, .06);
+      border-color: rgba(255, 255, 255, .16);
+      box-shadow:
+        0 0 20px 3px rgba(130, 180, 230, .10),
+        0 0 50px 10px rgba(100, 150, 210, .05),
+        0 8px 32px rgba(0, 0, 0, .3);
+    }
+
+    /* Card inner elements */
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .card-type {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: rgba(255, 255, 255, .45);
+    }
+
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, .06);
+      border: 1px solid rgba(255, 255, 255, .08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .card-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, .6);
+      margin-bottom: 6px;
+    }
+
+    .card-balance {
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+      color: rgba(255, 255, 255, .92);
+    }
+
+    .card-currency {
+      font-size: 12px;
+      color: rgba(255, 255, 255, .3);
+      font-weight: 500;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, .06);
+    }
+
+    .card-number {
+      font-size: 13px;
+      color: rgba(255, 255, 255, .28);
+      letter-spacing: 2px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .card-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: rgba(100, 220, 150, .7);
+      font-weight: 500;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(100, 220, 150, .7);
+      box-shadow: 0 0 6px rgba(100, 220, 150, .3);
+    }
+
+    /* ── Responsive ───────────────────────────────── */
+    @media (max-width: 768px) {
+      .scene {
+        justify-content: center;
+        padding: 30px 20px;
+        background-position: 50% 40%;
+        background-size: 200%;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .account-card {
+        width: calc(100vw - 80px);
+        padding: 20px 18px 18px;
+      }
+
+      .card-balance {
+        font-size: 24px;
+      }
+
+      .page {
+        padding: 10px 12px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    function AccountCard({ type, name, balance, currency, icon, accountNumber }) {
+      return (
+        <div className="account-card">
+          <div className="card-header">
+            <span className="card-type">{type}</span>
+            <div className="card-icon">{icon}</div>
+          </div>
+
+          <div className="card-name">{name}</div>
+          <div className="card-balance">
+            {currency === 'USD' ? '$' : ''}
+            {balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+          </div>
+          <div className="card-currency">{currency}</div>
+
+          <div className="card-footer">
+            <span className="card-number">{accountNumber}</span>
+            <span className="card-status">
+              <span className="status-dot"></span>
+              Активен
+            </span>
+          </div>
+        </div>
+      );
+    }
+
+    function App() {
+      const accounts = [
+        {
+          type: 'Сберегательный счёт',
+          name: 'Основной счёт',
+          balance: 24830.50,
+          currency: 'USD',
+          icon: '\u{1F48E}',
+          accountNumber: '\u2022\u2022\u2022\u2022 4521',
+        },
+        {
+          type: 'Сберегательный счёт',
+          name: 'Накопительный',
+          balance: 12460.00,
+          currency: 'USD',
+          icon: '\u2728',
+          accountNumber: '\u2022\u2022\u2022\u2022 8734',
+        },
+      ];
+
+      return (
+        <div className="page">
+          <div className="page-title">Счета</div>
+          <div className="scene">
+            <div className="cards-wrapper">
+              {accounts.map((acc, i) => (
+                <AccountCard key={i} {...acc} />
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
