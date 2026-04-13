@@ -66,48 +66,52 @@
       width: 480px;
       padding: 28px 32px 24px;
       border-radius: 16px;
-      background: rgba(255, 255, 255, .06);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, .12);
+      background:
+        linear-gradient(
+          180deg,
+          rgba(10, 15, 30, .75) 0%,
+          rgba(8, 12, 25, .60) 100%
+        ),
+        url('card-bg.jpg') center center / cover no-repeat;
+      border: 1px solid rgba(255, 255, 255, .10);
       cursor: default;
+      overflow: hidden;
       transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
-      /* Soft glow — layered blue-white */
+      /* Glow — soft diffused border light matching mockup */
       box-shadow:
-        0 0 15px 1px rgba(100, 170, 255, .07),
-        0 0 40px 2px rgba(80, 150, 255, .04),
-        0 8px 32px rgba(0, 0, 0, .25);
+        0 0 18px 2px rgba(140, 180, 220, .08),
+        0 0 50px 8px rgba(100, 150, 200, .05),
+        0 8px 32px rgba(0, 0, 0, .4);
     }
 
     .account-card:hover {
       transform: translateY(-4px);
-      border-color: rgba(255, 255, 255, .22);
+      border-color: rgba(255, 255, 255, .18);
       box-shadow:
-        0 0 25px  4px rgba(120, 180, 255, .16),
-        0 0 60px 10px rgba(100, 160, 255, .08),
-        0 0 100px 20px rgba(80, 140, 255, .04),
-        0 12px 40px rgba(0, 0, 0, .3);
+        0 0 25px  5px rgba(140, 190, 230, .14),
+        0 0 60px 15px rgba(110, 160, 210, .08),
+        0 0 100px 25px rgba(80, 130, 190, .04),
+        0 12px 40px rgba(0, 0, 0, .45);
     }
 
-    /* Glow pseudo-element — soft edge light */
-    .account-card::before {
+    /* Glow pseudo-element — wide soft halo behind card */
+    .account-card::after {
       content: '';
       position: absolute;
-      inset: -1px;
-      border-radius: 17px;
-      background: linear-gradient(
-        160deg,
-        rgba(140, 200, 255, .12) 0%,
-        transparent 40%,
-        transparent 60%,
-        rgba(120, 180, 255, .06) 100%
+      inset: -20px;
+      border-radius: 30px;
+      background: radial-gradient(
+        ellipse at center,
+        rgba(120, 170, 220, .06) 0%,
+        transparent 70%
       );
       z-index: -1;
       opacity: 0;
       transition: opacity .35s ease;
+      pointer-events: none;
     }
 
-    .account-card:hover::before {
+    .account-card:hover::after {
       opacity: 1;
     }
 
