@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Account Cards — Glassmorphism Demo</title>
+  <title>Счета — Glassmorphism Demo</title>
 
   <!-- React via CDN -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -16,103 +16,70 @@
 
     body {
       min-height: 100vh;
-      background: #030810;
+      background: #1e1e1e;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       color: #fff;
       overflow-x: hidden;
     }
 
-    /* ── Space background image ───────────────────── */
-    .space-bg {
-      position: fixed;
-      inset: 0;
-      background: url('space-bg.jpg') center center / cover no-repeat;
-      z-index: 0;
+    /* ── Page layout ─────────────────────────────── */
+    .page {
+      padding: 12px 20px 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* Subtle vignette overlay for depth */
-    .space-bg::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(
-        ellipse 80% 70% at 35% 55%,
-        transparent 30%,
-        rgba(3, 8, 16, .3) 70%,
-        rgba(3, 8, 16, .6) 100%
-      );
+    .page-title {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, .7);
+      margin-bottom: 8px;
     }
 
-    /* ── Layout ───────────────────────────────────── */
-    .app {
+    /* ── Scene container with space background ──── */
+    .scene {
       position: relative;
-      z-index: 1;
+      flex: 1;
+      border-radius: 20px;
+      overflow: hidden;
+      background: url('space-bg.jpg') 42% 45% / 120% no-repeat;
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      min-height: 100vh;
-      padding: 40px 8vw 40px 40px;
+      padding: 40px 5%;
     }
 
     .cards-wrapper {
       display: flex;
       flex-direction: column;
       gap: 20px;
+      z-index: 1;
     }
 
-    /* ── Account Card ────────────────────────────── */
+    /* ── Account Card — pure glass ───────────────── */
     .account-card {
       position: relative;
-      width: 480px;
-      padding: 28px 32px 24px;
+      width: 520px;
+      padding: 26px 30px 22px;
       border-radius: 16px;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(10, 15, 30, .75) 0%,
-          rgba(8, 12, 25, .60) 100%
-        ),
-        url('card-bg.jpg') center center / cover no-repeat;
+      background: rgba(255, 255, 255, .04);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, .10);
       cursor: default;
-      overflow: hidden;
-      transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
-      /* Glow — soft diffused border light matching mockup */
-      box-shadow:
-        0 0 18px 2px rgba(140, 180, 220, .08),
-        0 0 50px 8px rgba(100, 150, 200, .05),
-        0 8px 32px rgba(0, 0, 0, .4);
+      transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease, background .35s ease;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, .2);
     }
 
     .account-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(255, 255, 255, .18);
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, .06);
+      border-color: rgba(255, 255, 255, .16);
       box-shadow:
-        0 0 25px  5px rgba(140, 190, 230, .14),
-        0 0 60px 15px rgba(110, 160, 210, .08),
-        0 0 100px 25px rgba(80, 130, 190, .04),
-        0 12px 40px rgba(0, 0, 0, .45);
-    }
-
-    /* Glow pseudo-element — wide soft halo behind card */
-    .account-card::after {
-      content: '';
-      position: absolute;
-      inset: -20px;
-      border-radius: 30px;
-      background: radial-gradient(
-        ellipse at center,
-        rgba(120, 170, 220, .06) 0%,
-        transparent 70%
-      );
-      z-index: -1;
-      opacity: 0;
-      transition: opacity .35s ease;
-      pointer-events: none;
-    }
-
-    .account-card:hover::after {
-      opacity: 1;
+        0 0 20px 3px rgba(130, 180, 230, .10),
+        0 0 50px 10px rgba(100, 150, 210, .05),
+        0 8px 32px rgba(0, 0, 0, .3);
     }
 
     /* Card inner elements */
@@ -120,7 +87,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .card-type {
@@ -168,8 +135,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 18px;
-      padding-top: 14px;
+      margin-top: 16px;
+      padding-top: 12px;
       border-top: 1px solid rgba(255, 255, 255, .06);
     }
 
@@ -199,27 +166,31 @@
 
     /* ── Responsive ───────────────────────────────── */
     @media (max-width: 768px) {
-      .app {
+      .scene {
         justify-content: center;
-        padding: 40px 20px;
+        padding: 30px 20px;
+        background-position: 40% 50%;
+        background-size: 160%;
       }
     }
 
-    @media (max-width: 540px) {
+    @media (max-width: 580px) {
       .account-card {
-        width: calc(100vw - 40px);
-        padding: 22px 20px 20px;
+        width: calc(100vw - 80px);
+        padding: 20px 18px 18px;
       }
 
       .card-balance {
         font-size: 24px;
       }
+
+      .page {
+        padding: 10px 12px 12px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="space-bg"></div>
-
   <div id="root"></div>
 
   <script type="text/babel">
@@ -255,24 +226,27 @@
           name: 'Main Account',
           balance: 24830.50,
           currency: 'USD',
-          icon: '💎',
-          accountNumber: '•••• 4521',
+          icon: '\u{1F48E}',
+          accountNumber: '\u2022\u2022\u2022\u2022 4521',
         },
         {
           name: 'Savings Goal',
           balance: 12460.00,
           currency: 'USD',
-          icon: '✨',
-          accountNumber: '•••• 8734',
+          icon: '\u2728',
+          accountNumber: '\u2022\u2022\u2022\u2022 8734',
         },
       ];
 
       return (
-        <div className="app">
-          <div className="cards-wrapper">
-            {accounts.map((acc, i) => (
-              <AccountCard key={i} {...acc} />
-            ))}
+        <div className="page">
+          <div className="page-title">Счета</div>
+          <div className="scene">
+            <div className="cards-wrapper">
+              {accounts.map((acc, i) => (
+                <AccountCard key={i} {...acc} />
+              ))}
+            </div>
           </div>
         </div>
       );
